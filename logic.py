@@ -22,5 +22,28 @@ def create_user(name, chat_id, user_id):
     conn.close()
 
 
+def get_user(user_id):
+    conn = sqlite3.connect(config.db_name)
+    c = conn.cursor()
+    c.execute('SELECT * FROM users WHERE user_id=?', (user_id,))
+    user = c.fetchone()
+    conn.close()
+    return user
+
+def update_user(user_id, name):
+    conn = sqlite3.connect(config.db_name)
+    c = conn.cursor()
+    c.execute('UPDATE users SET name=? WHERE user_id=?', (name, user_id))
+    conn.commit()
+    conn.close()
+
+def delete_user(user_id):
+    conn = sqlite3.connect(config.db_name)
+    c = conn.cursor()
+    c.execute('DELETE FROM users WHERE user_id=?', (user_id,))
+    conn.commit()
+    conn.close()
+
+
 if __name__ == '__main__':
     create_db()
