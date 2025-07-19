@@ -13,11 +13,26 @@ def create_db():
     conn.commit()
     conn.close()
 
+def users_search():
+    conn = sqlite3.connect(config.db_name)
+    c = conn.cursor()
+    c.execute('create table if not exists users_answers (id integer primary key autoincrement, answer text, user_id integer)')
+    users = c.fetchall()
+    conn.close()
+    return users
+
 
 def create_user(name, chat_id, user_id):
     conn = sqlite3.connect(config.db_name)
     c = conn.cursor()
     c.execute('INSERT INTO users (name, chat_id, user_id) VALUES (?, ?, ?)', (name, chat_id, user_id))
+    conn.commit()
+    conn.close()
+
+def write_user_answer(user_id, answer):
+    conn = sqlite3.connect(config.db_name)
+    c = conn.cursor()
+    c.execute('INSERT INTO users_answers (user_id, answer) VALUES (?, ?)', (user_id, answer))
     conn.commit()
     conn.close()
 
@@ -47,3 +62,4 @@ def delete_user(user_id):
 
 if __name__ == '__main__':
     create_db()
+    users_search()
